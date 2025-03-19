@@ -1,0 +1,54 @@
+;256k bytes, which is 2M ROM
+;ROM 0x00000000  0x40000	0x30000
+ROM 0x10000000  0x80000
+{
+    ER_TABLE +0
+    {
+        *(jump_table_0)
+        *(jump_table_1)
+        *(jump_table_2)
+        *(jump_table_3)
+        *(jump_table_4)
+    }
+    
+    ER_RO 0x10002000 FIXED
+    {
+        *(+RO)
+    }
+    
+    GUI_MENU_DATA +0 ALIGN 0x4
+    {
+        *(gui_menu)
+    }
+    
+    ER_BOOT 0x11000000
+    {
+        boot_vectors.o (RESET, +FIRST)
+    }
+    
+    USER_RE_RAM 0x11001000
+    {
+        *(ram_code)
+    }
+	
+    ER_RW +0
+    {
+        *(+RW)
+        *(STACK)
+    }
+    
+    ER_STACK +0
+    {
+        *(stack_section)
+    }
+
+    ER_ZI +0
+    {
+        *(+ZI)
+    }
+	
+    HEAP_KE +0 
+    {
+        *(heap_ke)
+    }
+}

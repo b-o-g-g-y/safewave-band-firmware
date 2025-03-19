@@ -1,0 +1,169 @@
+# ---------------------------------- #
+#    GCC Bulid command log config    #
+# ---------------------------------- #
+#CMD_LOG = 1
+
+# echo suspend
+ifdef CMD_LOG
+  NO_ECHO = 
+else
+  NO_ECHO = @
+endif
+
+SYSTEM := $(filter Windows_NT, $(OS))
+
+# ---------------------------------- #
+# Project name                       #
+# ---------------------------------- #
+PROJECT_NAME := fr8000_project
+
+# ---------------------------------- #
+# Path config                        #
+# ---------------------------------- #
+TOP_DIR     := ../../../..
+PROJECT_DIR := ../code
+OBJECT_DIR  := Objects
+
+# ---------------------------------- #
+# Toolchain config                   #
+# ---------------------------------- #
+TOOLCHAIN := arm-none-eabi
+
+CC      := $(TOOLCHAIN)-gcc
+AS      := $(TOOLCHAIN)-as
+LD      := $(TOOLCHAIN)-ld
+OBJDUMP := $(TOOLCHAIN)-objdump
+OBJCOPY := $(TOOLCHAIN)-objcopy
+SIZE    := $(TOOLCHAIN)-size
+
+# ---------------------------------- #
+# ld/lib config                      #
+# ---------------------------------- #
+LD   := $(TOP_DIR)/components/toolchain/gcc/ldscript.ld
+LD_C := $(TOP_DIR)/components/ble/library/syscall_gcc.txt
+LIB  := $(TOP_DIR)/components/ble/library/libfr800x_stack.a
+
+# ---------------------------------- #
+# Source files config                #
+# ---------------------------------- #
+SRC_FILES += $(TOP_DIR)/components/driver/driver_pmu.c
+SRC_FILES += $(TOP_DIR)/examples/none_evm/ble_band/code/proj_main.c
+SRC_FILES += $(TOP_DIR)/examples/none_evm/ble_band/code/ble_simple_peripheral.c
+SRC_FILES += $(TOP_DIR)/components/modules/common/src/co_log.c
+SRC_FILES += $(TOP_DIR)/components/toolchain/gcc/boot_vectors.c
+SRC_FILES += $(TOP_DIR)/components/ble/profiles/ble_dev_info/dev_info_service.c
+SRC_FILES += $(TOP_DIR)/components/ble/profiles/ble_batt/batt_service.c
+SRC_FILES += $(TOP_DIR)/components/ble/profiles/ble_ota/ota_service.c
+# Add missing source files
+SRC_FILES += $(PROJECT_DIR)/app_pwm.c
+SRC_FILES += $(PROJECT_DIR)/app_key.c
+SRC_FILES += $(PROJECT_DIR)/app_adc.c
+SRC_FILES += $(PROJECT_DIR)/device_info_flash.C
+SRC_FILES += $(PROJECT_DIR)/profile/ANCS_client.c
+SRC_FILES += $(PROJECT_DIR)/profile/band.c
+SRC_FILES += $(PROJECT_DIR)/profile/ota.c
+# Add driver source files
+SRC_FILES += $(TOP_DIR)/components/driver/driver_gpio.c
+SRC_FILES += $(TOP_DIR)/components/driver/driver_adc.c
+SRC_FILES += $(TOP_DIR)/components/driver/driver_pwm.c
+SRC_FILES += $(TOP_DIR)/components/driver/driver_timer.c
+SRC_FILES += $(TOP_DIR)/components/driver/driver_efuse.c
+SRC_FILES += $(TOP_DIR)/components/driver/driver_wdt.c
+SRC_FILES += $(TOP_DIR)/components/driver/driver_flash.c
+
+# ---------------------------------- #
+# Include path config                #
+# ---------------------------------- #
+INC_PATH += -I$(TOP_DIR)/components/modules/os/include
+INC_PATH += -I$(TOP_DIR)/components/driver/include
+INC_PATH += -I$(TOP_DIR)/components/driver/drv_common
+INC_PATH += -I$(TOP_DIR)/components/driver/components/display
+INC_PATH += -I$(TOP_DIR)/components/driver/components/spi_flash
+INC_PATH += -I$(TOP_DIR)/components/driver/components/touchpad
+INC_PATH += -I$(TOP_DIR)/components/modules/platform/include
+INC_PATH += -I$(TOP_DIR)/components/modules/platform/include/cmsis
+INC_PATH += -I$(TOP_DIR)/components/modules/common/include
+INC_PATH += -I$(TOP_DIR)/components/modules/sys/include
+INC_PATH += -I$(TOP_DIR)/components/modules/os
+INC_PATH += -I$(TOP_DIR)/components/modules/button
+INC_PATH += -I"$(TOP_DIR)/components/ble/include"
+INC_PATH += -I"$(TOP_DIR)/components/ble/include/gap"
+INC_PATH += -I"$(TOP_DIR)/components/ble/include/gatt"
+INC_PATH += -I"$(TOP_DIR)/components/ble/include/mesh"
+# BLE Profiles
+INC_PATH += -I"$(TOP_DIR)/components/ble/profiles/ble_simple_profile"
+INC_PATH += -I"$(TOP_DIR)/components/ble/profiles/ble_ota"
+INC_PATH += -I"$(TOP_DIR)/components/ble/profiles/ble_dev_info"
+INC_PATH += -I"$(TOP_DIR)/components/ble/profiles/ble_batt"
+INC_PATH += -I"$(TOP_DIR)/components/ble/profiles/ble_hid"
+INC_PATH += -I"$(TOP_DIR)/components/ble/profiles/ble_AirSync"
+INC_PATH += -I"$(TOP_DIR)/components/ble/profiles/ble_audio_profile"
+# Project specific paths
+INC_PATH += -I"$(PROJECT_DIR)/profile"
+INC_PATH += -I"$(PROJECT_DIR)"
+
+# ----------------------------------- #
+# Objects files common to all targets #
+# ----------------------------------- #
+BASE_SRC  = $(notdir $(SRC_FILES)) 
+BASE_OBJS = $(patsubst %.c,%.o,$(patsubst %.C,%.o,$(BASE_SRC)))
+OBJS      = $(addprefix $(OBJECT_DIR)/,$(BASE_OBJS))
+
+# Create Objects directory if it doesn't exist
+$(shell mkdir -p $(OBJECT_DIR))
+
+# ---------------------------------- #
+# Source files path                  #
+# ---------------------------------- #
+VPATH = $(sort $(dir $(SRC_FILES)))
+
+BASE_ElF  = $(OBJECT_DIR)/$(PROJECT_NAME).elf
+
+# ---------------------------------- #
+# C flags common to all targets      #
+# ---------------------------------- #
+CFLAGS += -mcpu=cortex-m3
+CFLAGS += -mthumb
+CFLAGS += -O3
+CFLAGS += -fmessage-length=0 -fsigned-char
+CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS += -g3
+CFLAGS += -std=gnu11
+
+# ---------------------------------- #
+# LD flags common to all targets     #
+# ---------------------------------- #
+LDFLAGS += -mcpu=cortex-m3
+LDFLAGS += -mthumb
+LDFLAGS += -O3
+LDFLAGS += -fmessage-length=0 -fsigned-char
+LDFLAGS += -ffunction-sections -fdata-sections
+LDFLAGS += -g3
+LDFLAGS += -Xlinker --gc-sections
+LDFLAGS += --specs=nosys.specs -u _printf_float
+
+
+# ---------------------------------- #
+# Build Targets                      #
+# ---------------------------------- #
+all: $(BASE_ElF)
+	@echo Bulid: creating fr8000_project.bin
+	$(NO_ECHO)$(OBJCOPY) -O binary $(BASE_ElF) fr8000_project.bin
+	@echo Build complete
+
+$(BASE_ElF): $(OBJS)
+	@echo Bulid: creating Objects/fr8000_project.elf
+	$(NO_ECHO)$(CC) $(LDFLAGS) $(OBJS) $(LIB) -T$(LD) -o $@
+
+$(OBJECT_DIR)/%.o: %.c
+	@echo Bulid: compiling $<
+	$(NO_ECHO)$(CC) $(CFLAGS) $(INC_PATH) -c -o $@ $<
+
+$(OBJECT_DIR)/%.o: %.C
+	@echo Bulid: compiling $<
+	$(NO_ECHO)$(CC) $(CFLAGS) $(INC_PATH) -c -o $@ $<
+
+clean:
+	rm -f $(OBJECT_DIR)/*.o
+	rm -f $(BASE_ElF)
+	rm -f fr8000_project.bin

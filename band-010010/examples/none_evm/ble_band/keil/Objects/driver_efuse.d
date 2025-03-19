@@ -1,0 +1,15 @@
+.\objects\driver_efuse.o: ..\..\..\..\components\driver\driver_efuse.c
+.\objects\driver_efuse.o: ..\code\app_config.h
+.\objects\driver_efuse.o: ..\..\..\..\components\driver\include\driver_efuse.h
+.\objects\driver_efuse.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\driver_efuse.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\driver_efuse.o: ..\..\..\..\components\driver\include\driver_system.h
+.\objects\driver_efuse.o: ..\..\..\..\components\modules\platform\include\plf.h
+.\objects\driver_efuse.o: ..\..\..\..\components\modules\platform\include\cmsis\core_cm3.h
+.\objects\driver_efuse.o: ..\..\..\..\components\modules\platform\include\cmsis\cmsis_version.h
+.\objects\driver_efuse.o: ..\..\..\..\components\modules\platform\include\cmsis\cmsis_compiler.h
+.\objects\driver_efuse.o: ..\..\..\..\components\modules\platform\include\cmsis\cmsis_armcc.h
+.\objects\driver_efuse.o: ..\..\..\..\components\modules\platform\include\jump_table.h
+.\objects\driver_efuse.o: ..\..\..\..\components\modules\common\include\co_math.h
+.\objects\driver_efuse.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\driver_efuse.o: ..\..\..\..\components\modules\platform\include\plf.h

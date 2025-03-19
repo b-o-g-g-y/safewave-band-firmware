@@ -1,0 +1,69 @@
+TOP_DIR = ../../../..
+
+# Project name
+PROJECT = led_blink
+
+# Toolchain definitions
+CROSS_COMPILE = arm-none-eabi-
+CC = $(CROSS_COMPILE)gcc
+AS = $(CROSS_COMPILE)as
+LD = $(CROSS_COMPILE)ld
+OBJCOPY = $(CROSS_COMPILE)objcopy
+OBJDUMP = $(CROSS_COMPILE)objdump
+SIZE = $(CROSS_COMPILE)size
+
+# Project directories
+PROJECT_DIR = ../code
+
+# Source files
+SRC_FILES = $(PROJECT_DIR)/led_blink.c
+SRC_FILES += $(TOP_DIR)/components/driver/driver_gpio.c
+SRC_FILES += $(TOP_DIR)/components/driver/driver_system.c
+
+# Include paths
+INC_PATH = -I"$(PROJECT_DIR)"
+INC_PATH += -I"$(TOP_DIR)/components/driver/include"
+
+# Object files
+OBJ_FILES = $(patsubst %.c,Objects/%.o,$(notdir $(SRC_FILES)))
+
+# Compiler flags
+CFLAGS = -mcpu=cortex-m3 -mthumb -Wall -g
+CFLAGS += -O0 # No optimization for debugging
+CFLAGS += $(INC_PATH)
+
+# Linker flags
+LDFLAGS = -T $(TOP_DIR)/components/ble/library/syscall_gcc.txt
+LDFLAGS += -nostartfiles -Wl,--gc-sections
+
+# Output files
+TARGET_ELF = Objects/$(PROJECT).elf
+TARGET_BIN = Objects/$(PROJECT).bin
+TARGET_HEX = Objects/$(PROJECT).hex
+
+# Make rules
+all: $(TARGET_BIN) $(TARGET_HEX)
+
+$(TARGET_BIN): $(TARGET_ELF)
+	$(OBJCOPY) -O binary $< $@
+
+$(TARGET_HEX): $(TARGET_ELF)
+	$(OBJCOPY) -O ihex $< $@
+
+$(TARGET_ELF): $(OBJ_FILES)
+	@mkdir -p Objects
+	$(CC) $(CFLAGS) $(OBJ_FILES) -o $@ $(LDFLAGS)
+	$(SIZE) $@
+
+Objects/%.o: $(PROJECT_DIR)/%.c
+	@mkdir -p Objects
+	$(CC) $(CFLAGS) -c $< -o $@
+
+Objects/%.o: $(TOP_DIR)/components/driver/%.c
+	@mkdir -p Objects
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -rf Objects
+
+.PHONY: all clean 

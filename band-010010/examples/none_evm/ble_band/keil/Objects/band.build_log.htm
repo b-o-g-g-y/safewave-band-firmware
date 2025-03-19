@@ -1,0 +1,70 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.14.0.0
+Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: fan junjun, zor, LIC=Y2BRA-1QK79-BV21G-VTDTE-TH5ED-3S8K1
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.14.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.05 update 1 (build 106)
+Assembler:       Armasm.exe V5.05 update 1 (build 106)
+Linker/Locator:  ArmLink.exe V5.05 update 1 (build 106)
+Library Manager: ArmAr.exe V5.05 update 1 (build 106)
+Hex Converter:   FromElf.exe V5.05 update 1 (build 106)
+CPU DLL:         SARMCM3.DLL V5.14.0.0
+Dialog DLL:      DCM.DLL V1.13.1.0
+Target DLL:      Segger\JL2CM3.dll V2.99.13.0
+Dialog DLL:      TCM.DLL V1.14.4.0
+ 
+<h2>Project:</h2>
+C:\Users\Administrator\Desktop\band\examples\none_evm\ble_band\keil\ble_simple_peripheral.uvproj
+Project File Date:  06/27/2023
+
+<h2>Output:</h2>
+Rebuild target 'ble_simple_peripheral'
+compiling proj_main.c...
+compiling ble_simple_peripheral.c...
+..\code\ble_simple_peripheral.c(55): warning:  #767-D: conversion from pointer to smaller integer
+      gap_conn_param_update((uint8_t)arg, 24, 24, 21, 600);
+..\code\ble_simple_peripheral.c: 1 warning, 0 errors
+compiling device_info_flash.C...
+compiling app_adc.c...
+compiling app_key.c...
+compiling app_pwm.c...
+compiling band.c...
+compiling ota.c...
+compiling ota_service.c...
+compiling ANCS_client.c...
+..\..\..\..\components\ble\profiles\ble_ANCS\ANCS_client.c(122): warning:  #546-D: transfer of control bypasses initialization of:
+            variable "ntf_src" (declared at line 123)
+          goto _exit;
+          ^
+..\..\..\..\components\ble\profiles\ble_ANCS\ANCS_client.c(190): warning:  #188-D: enumerated type mixed with another type
+      enum ntf_msg_type_t msg_type = 0;
+..\..\..\..\components\ble\profiles\ble_ANCS\ANCS_client.c(195): warning:  #177-D: variable "uid" was declared but never referenced
+      uint32_t uid = *(uint32_t *)(p_data + i);
+..\..\..\..\components\ble\profiles\ble_ANCS\ANCS_client.c: 3 warnings, 0 errors
+compiling driver_pmu.c...
+compiling driver_gpio.c...
+compiling driver_keyscan.c...
+compiling driver_pwm.c...
+compiling driver_timer.c...
+compiling driver_adc.c...
+compiling driver_efuse.c...
+assembling boot_vectors.s...
+compiling co_log.c...
+linking...
+..\..\..\..\components\toolchain\armcc\fr800x.sct(21): warning: L6314W: No section matches pattern *(gui_menu).
+..\..\..\..\components\toolchain\armcc\fr800x.sct(37): warning: L6314W: No section matches pattern *(STACK).
+Program Size: Code=104824 RO-data=5292 RW-data=4996 ZI-data=6308  
+Finished: 0 information, 2 warning and 0 error messages.
+After Build - User command #1: fromelf.exe  --text  -c -o Output/ble_simple_peripheral.txt  Objects/ble_simple_peripheral.axf
+After Build - User command #2: fromelf.exe  --bin -o Output/ble_simple_peripheral.bin  Objects/ble_simple_peripheral.axf
+".\Objects\band.axf" - 0 Error(s), 6 Warning(s).
+</pre>
+</body>
+</html>

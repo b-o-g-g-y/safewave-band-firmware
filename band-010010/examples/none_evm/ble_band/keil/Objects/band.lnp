@@ -1,0 +1,26 @@
+--cpu Cortex-M3
+".\objects\proj_main.o"
+".\objects\ble_simple_peripheral.o"
+".\objects\device_info_flash.o"
+".\objects\app_adc.o"
+".\objects\app_key.o"
+".\objects\app_pwm.o"
+".\objects\band.o"
+".\objects\ota.o"
+".\objects\ota_service.o"
+".\objects\ancs_client.o"
+".\objects\driver_pmu.o"
+".\objects\driver_gpio.o"
+".\objects\driver_keyscan.o"
+".\objects\driver_pwm.o"
+".\objects\driver_timer.o"
+".\objects\driver_adc.o"
+".\objects\driver_efuse.o"
+".\objects\boot_vectors.o"
+"..\..\..\..\components\ble\library\fr8000_stack.lib"
+".\objects\co_log.o"
+--library_type=microlib --strict --scatter "..\..\..\..\components\toolchain\armcc\fr800x.sct"
+
+--feedback=feedback.txt ../../../../components/ble/library/syscall.txt --entry=app_main --keep=_jump_table_reserved --keep=_jump_table_version --keep=_jump_table_image --keep=_jump_table_middle --keep=_jump_table_last --datacompressor=off --summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\band.map" -o .\Objects\band.axf
